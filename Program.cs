@@ -12,7 +12,7 @@ namespace TelegBot
 {
     internal class Program
     {
-        static ITelegramBotClient bot = new TelegramBotClient("");
+        static ITelegramBotClient bot = new TelegramBotClient("6275603213:AAGcU2TVg_wTnRyvXLXTfjxMnTysGhb-e3c");
         public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             // Некоторые действия
