@@ -12,7 +12,7 @@ namespace TelegBot
 {
     internal class Program
     {
-        static ITelegramBotClient bot = new TelegramBotClient("6275603213:AAGcU2TVg_wTnRyvXLXTfjxMnTysGhb-e3c");
+        static ITelegramBotClient bot = new TelegramBotClient("");
         public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             // Некоторые действия
@@ -55,7 +55,7 @@ namespace TelegBot
             HtmlWeb webGet = new HtmlWeb();
             webGet.OverrideEncoding = Encoding.GetEncoding(1251);
             HtmlDocument doc = webGet.Load(url);
-            return doc.DocumentNode.OuterHtml;
+            //Console.WriteLine(doc.DocumentNode.OuterHtml);
             //Console.ReadLine();
             string res = doc.DocumentNode.InnerText;
             return res;
