@@ -2,9 +2,11 @@
   "name": "polissiaSchedule",
   "version": "1.0.0",
   "description": "",
-  "scripts": {
-    "build": "dotnet build",
-    "start": "dotnet run"
+  "main": "Program.cs",
+  "dependencies": {
+    "html-agility-pack": "1.11.46",
+    "telegram-bot-api": "18.0.0",
+    "telegram-bot-sdk": "5.9.0"
   },
   "repository": {
     "type": "git",
