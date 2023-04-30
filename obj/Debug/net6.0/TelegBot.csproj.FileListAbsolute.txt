@@ -104,3 +104,4 @@ D:\programming\polissiaSchedule\obj\Debug\net6.0\refint\TelegBot.dll
 D:\programming\polissiaSchedule\obj\Debug\net6.0\TelegBot.pdb
 D:\programming\polissiaSchedule\obj\Debug\net6.0\TelegBot.genruntimeconfig.cache
 D:\programming\polissiaSchedule\obj\Debug\net6.0\ref\TelegBot.dll
+C:\Users\oleks\source\repos\TelegBot\bin\Debug\net6.0\MySqlConnector.dll

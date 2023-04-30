@@ -39,23 +39,6 @@ namespace TelegBot
             Console.ReadLine();
         }
 
-        static string GetRequest(string url)
-        {
-            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            HtmlWeb webGet = new HtmlWeb();
-            webGet.OverrideEncoding = Encoding.GetEncoding(1251);
-            HtmlDocument doc = webGet.Load(url);
-            string res = doc.DocumentNode.InnerText;
-            return res;
-            //Console.WriteLine(doc.DocumentNode.OuterHtml);
-            //Console.ReadLine();
-
-            //Console.WriteLine(res);
-            //HtmlNode myNode = doc.DocumentNode.SelectSingleNode("div//[@class='row']");
-            //Console.WriteLine(myNode.InnerText);
-            //if (myNode != null) return doc.DocumentNode.OuterHtml;
-            //else return "Nothing found";
-        }
     }
 
 }
