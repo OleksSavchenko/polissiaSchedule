@@ -12,6 +12,7 @@ using static System.Net.WebRequestMethods;
 using MySqlConnector;
 using Telegram.Bot.Types;
 using System.Text.RegularExpressions;
+using Telegram.Bots.Types;
 
 namespace TelegBot
 {
@@ -19,69 +20,98 @@ namespace TelegBot
     
     internal partial class BotEngine
     {
-        const string server = "localhost";
-        const string databaseName = "telegrambotdb";
-        const string username = "root";
-        const string password = "usbw";
-        const string connString = $"SERVER={server};DATABASE={databaseName};UID={username};PASSWORD={password};";
+        
 
         enum State { Menu, ScheduleMenu, ScheduleChooseGroup, ScheduleChooseTeacher }
-        static State currentState;
+
+        
+        static Dictionary<long, State> usersStatus = new Dictionary<long, State>();
+
+        
 
         public static void HandleUserMessage(ITelegramBotClient botClient, Telegram.Bot.Types.Message message)
         {
-            switch (message.Text.ToLower())
+            try
             {
-                case "/start":
-                case "повернутись в меню":
-                    currentState = State.Menu;
-                    MenuReply(botClient, message);
-                    break;
-                case "показати розклад":
-                    if (currentState == State.Menu)
-                    {  
-                        currentState = State.ScheduleMenu;
-                        ScheduleOptionsReply(botClient, message);
-                    }  
-                    else
-                    {  
-                        ErrorReply(botClient, message);
-                    }  
-                    break;
-                case "обрати групу":
-                    if (currentState == State.ScheduleMenu)
-                    {
-                        currentState = State.ScheduleChooseGroup;
-                        EnterGroupNameReply(botClient, message);
-                    }
-                    else ErrorReply(botClient, message);  
-                    break;
-                case "обрати викладача":
-                    if (currentState == State.ScheduleMenu)
-                    {
-                        currentState = State.ScheduleChooseTeacher;
-                        EnterTeacherNameReply(botClient, message);
-                    }
-                    break;
-                default:
-                    if(currentState == State.ScheduleChooseGroup)
-                    {  
-                        currentState = State.Menu;
-                        GroupScheduleShow(botClient, message);
+                switch (message.Text.ToLower())
+                {
+                    case "/start":
+                    case "повернутись в меню":
                         MenuReply(botClient, message);
-                    }
-                    else if (currentState == State.ScheduleChooseTeacher)
-                    {
-                        currentState = State.Menu;
-                        TeacherScheduleShow(botClient, message);
-                        MenuReply(botClient, message);
-                    }
-                    else
-                    {  
-                        ErrorReply(botClient, message);
-                    }  
-                    break;
-            }          
+                        break;
+                    case "показати розклад":
+                        if (!usersStatus.ContainsKey(message.From.Id))
+                        {
+                            usersStatus.Add(message.From.Id, State.ScheduleMenu);
+                            ScheduleOptionsReply(botClient, message);
+                        }
+                        else throw new Exception();
+                        break;
+                    case "показати свій розклад":
+                        string[] userDataArr = GetUser(message.From.Id);
+                        if (userDataArr[0] != null)
+                        {
+                            if (userDataArr[0] == "student")
+                            {
+                                GroupScheduleShow(botClient, message);
+                                MenuReply(botClient, message);
+                            }
+                            else if (userDataArr[0] == "teacher")
+                            {
+                                TeacherScheduleShow(botClient, message);
+                                MenuReply(botClient, message);
+                            }
+                            else throw new Exception();
+                        }
+                        break;
+                    case "обрати групу":
+                        if (usersStatus[message.From.Id] == State.ScheduleMenu)
+                        {
+                            usersStatus[message.From.Id] = State.ScheduleChooseGroup;
+                            EnterGroupNameReply(botClient, message);
+                        }
+                        else throw new Exception();
+                        break;
+                    case "обрати викладача":
+                        if (usersStatus[message.From.Id] == State.ScheduleMenu)
+                        {
+                            usersStatus[message.From.Id] = State.ScheduleChooseTeacher;
+                            EnterTeacherNameReply(botClient, message);
+                        }
+                        else throw new Exception();
+                        break;
+                    default:
+                        if (usersStatus[message.From.Id] == State.ScheduleChooseGroup)
+                        {
+                            if (GetUser(message.From.Id)[0] == null)
+                            {
+                                DBUserInsert(message.From.Id, "student", message.Text);
+                            }
+                            usersStatus.Remove(message.From.Id);
+                            GroupScheduleShow(botClient, message);
+                            MenuReply(botClient, message);
+                        }
+                        else if (usersStatus[message.From.Id] == State.ScheduleChooseTeacher)
+                        {
+                            if (GetUser(message.From.Id)[0] == null)
+                            {
+                                DBUserInsert(message.From.Id, "teacher", message.Text);
+                            }
+                            usersStatus.Remove(message.From.Id);
+                            TeacherScheduleShow(botClient, message);
+                            MenuReply(botClient, message);
+                        }
+                        else
+                        {
+                            throw new Exception();
+                        }
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                ErrorReply(botClient, message);
+            }
             return;    
         }              
 
@@ -147,9 +177,10 @@ namespace TelegBot
             webGet.OverrideEncoding = Encoding.GetEncoding(1251);
             HtmlDocument doc = webGet.Load(url);
             string res = doc.DocumentNode.InnerText;
+            List<string> days = GetDaysList(res);
             for(int i = 0; i < 5; i++)
             {
-                await botClient.SendTextMessageAsync(message.Chat, StringFormatter(res, i));
+                await botClient.SendTextMessageAsync(message.Chat, StringFormatter(days[i]));
             }
         }
         public static async Task TeacherScheduleShow(ITelegramBotClient botClient, Telegram.Bot.Types.Message message)
@@ -164,7 +195,11 @@ namespace TelegBot
             webGet.OverrideEncoding = Encoding.GetEncoding(1251);
             HtmlDocument doc = webGet.Load(url);
             string res = doc.DocumentNode.InnerText;
-            await botClient.SendTextMessageAsync(message.Chat, res);
+            List<string> days = GetDaysList(res);
+            for (int i = 0; i < 5; i++)
+            {
+                await botClient.SendTextMessageAsync(message.Chat, StringFormatter(days[i]));
+            }
         }
 
         public static async Task EnterGroupNameReply(ITelegramBotClient botClient, Telegram.Bot.Types.Message message)
@@ -178,51 +213,37 @@ namespace TelegBot
 
         public static async Task ErrorReply(ITelegramBotClient botClient, Telegram.Bot.Types.Message message)
         {
+
             await botClient.SendTextMessageAsync(message.Chat, "Something went wrong :)");
+            usersStatus.Remove(message.From.Id);
+            await MenuReply(botClient, message);
         }
 
         public static string GetGroupID(string message)
         {
-            MySqlConnection conn = new MySqlConnection(connString);
-            conn.Open();
+
             string query = $"select * from groups where groupName = '{message.ToLower()}'";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
+            MySqlCommand cmd = new MySqlCommand(query, Program.conn);
             MySqlDataReader reader = cmd.ExecuteReader();
             reader.Read();
             return reader["groupID"].ToString();
         }
         public static string GetTeacherID(string message)
         {
-            MySqlConnection conn = new MySqlConnection(connString);
-            conn.Open();
             string query = $"select * from teachers where teacherName = '{message.ToLower()}'";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
+            MySqlCommand cmd = new MySqlCommand(query, Program.conn);
             MySqlDataReader reader = cmd.ExecuteReader();
             reader.Read();
             return reader["teacherID"].ToString();
         }
 
-        public static string StringFormatter(string htmlText, int dayNumber)
+        public static string StringFormatter(string daySchedule)
         {
-            htmlText = Regex.Replace(htmlText, @"\s+", " ");
-
-            //спліт по дням
-            Regex daysRegex = new Regex(@"(?<=[0-9]{2}.[0-9]{2}.[0-9]{4})");
-            string[] lines = daysRegex.Split(htmlText);
-            List<string> days = new List<string>();
-            for (int i = 4; i < lines.Length - 1; i++)
-            {
-                string date = lines[i].Substring(lines[i].Length - 10);
-                date += lines[i + 1];
-                string z = date.Remove(date.Length - 10);
-                days.Add(z);
-            }
 
             //спліт по парах
             Regex dayRegex = new Regex(@"(?<=[0-9:]{11})");
             List<string> dayLectures = new List<string>();
-            string day = days[dayNumber];
-            string[] subj = dayRegex.Split(day);
+            string[] subj = dayRegex.Split(daySchedule);
             for (int i = 0; i < subj.Length - 1; i++)
             {
                 if (i == 0) dayLectures.Add(subj[i].Remove(subj[i].Length - 11));
@@ -273,5 +294,50 @@ namespace TelegBot
 
             return result;
         }
+        public static List<string> GetDaysList(string htmlText)
+        {
+            htmlText = Regex.Replace(htmlText, @"\s+", " ");
+
+            //спліт по дням
+            Regex daysRegex = new Regex(@"(?<=[0-9]{2}.[0-9]{2}.[0-9]{4})");
+            string[] lines = daysRegex.Split(htmlText);
+            List<string> days = new List<string>();
+            for (int i = 4; i < lines.Length - 1; i++)
+            {
+                string date = lines[i].Substring(lines[i].Length - 10);
+                date += lines[i + 1];
+                string z = date.Remove(date.Length - 10);
+                days.Add(z);
+            }
+            return days;
+        }
+        public static string[] GetUser(long id)
+        {
+            string query = $"select * from users where userID = '{id.ToString().ToLower()}'";
+            MySqlCommand cmd = new MySqlCommand(query, Program.conn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            reader.Read();
+            string[] userArr = new string[2];
+            try
+            {
+                userArr[0] = reader["userStatus"].ToString();
+                userArr[1] = reader["userSchedule"].ToString();
+            }
+            catch (Exception)
+            {
+                return userArr;
+            }
+            return userArr;
+        }
+        public static void DBUserInsert(long userID, string status, string schedule)
+        {
+            string query = $"INSERT INTO `users`(`userID`, `userSchedule`, `userStatus`) VALUES('{userID}', '{schedule}', '{status}')";
+            MySqlCommand cmd = new MySqlCommand(query, Program.conn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+            }
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.VisualBasic;
+using MySqlConnector;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Runtime.Intrinsics.Arm;
@@ -23,10 +24,20 @@ namespace TelegBot
     {
         static ITelegramBotClient bot = new TelegramBotClient("6275603213:AAGcU2TVg_wTnRyvXLXTfjxMnTysGhb-e3c");
 
+        const string server = "localhost";
+        const string databaseName = "telegrambotdb";
+        const string username = "root";
+        const string password = "usbw";
+        const string connString = $"SERVER={server};DATABASE={databaseName};UID={username};PASSWORD={password};";
+        public static MySqlConnection conn = new MySqlConnection(connString);
+
+
 
         static void Main(string[] args)
         {
             Console.WriteLine("Hehe: " + bot.GetMeAsync().Result.FirstName);
+
+            conn.Open();
 
             var cts = new CancellationTokenSource();
             var cancellationToken = cts.Token;
