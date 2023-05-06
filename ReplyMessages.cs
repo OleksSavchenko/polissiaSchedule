@@ -31,6 +31,7 @@ namespace TelegBot
 
         public static void HandleUserMessage(ITelegramBotClient botClient, Telegram.Bot.Types.Message message)
         {
+
             try
             {
                 switch (message.Text.ToLower())
@@ -51,6 +52,7 @@ namespace TelegBot
                         string[] userDataArr = GetUser(message.From.Id);
                         if (userDataArr[0] != null)
                         {
+                            message.Text = userDataArr[1];
                             if (userDataArr[0] == "student")
                             {
                                 GroupScheduleShow(botClient, message);
@@ -103,6 +105,7 @@ namespace TelegBot
                         }
                         else
                         {
+
                             throw new Exception();
                         }
                         break;
@@ -168,20 +171,20 @@ namespace TelegBot
 
         public static async Task GroupScheduleShow(ITelegramBotClient botClient, Telegram.Bot.Types.Message message)
         {
-            string url = "http://rozklad.znau.edu.ua/cgi-bin/timetable.cgi?n=999&group=";
+                string url = "http://rozklad.znau.edu.ua/cgi-bin/timetable.cgi?n=999&group=";
 
-            url += GetGroupID(message.Text);
-            
-            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            HtmlWeb webGet = new HtmlWeb();
-            webGet.OverrideEncoding = Encoding.GetEncoding(1251);
-            HtmlDocument doc = webGet.Load(url);
-            string res = doc.DocumentNode.InnerText;
-            List<string> days = GetDaysList(res);
-            for(int i = 0; i < 5; i++)
-            {
-                await botClient.SendTextMessageAsync(message.Chat, StringFormatter(days[i]));
-            }
+                url += GetGroupID(message.Text);
+
+                Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                HtmlWeb webGet = new HtmlWeb();
+                webGet.OverrideEncoding = Encoding.GetEncoding(1251);
+                HtmlDocument doc = webGet.Load(url);
+                string res = doc.DocumentNode.InnerText;
+                List<string> days = GetDaysList(res);
+                for (int i = 0; i < 5; i++)
+                {
+                    await botClient.SendTextMessageAsync(message.Chat, StringFormatter(days[i]));
+                }
         }
         public static async Task TeacherScheduleShow(ITelegramBotClient botClient, Telegram.Bot.Types.Message message)
         {
@@ -226,7 +229,17 @@ namespace TelegBot
             MySqlCommand cmd = new MySqlCommand(query, Program.conn);
             MySqlDataReader reader = cmd.ExecuteReader();
             reader.Read();
-            return reader["groupID"].ToString();
+            string groupID = "";
+            try
+            {
+                groupID = reader["groupID"].ToString();
+            }
+            catch (Exception)
+            {
+                reader.Close();
+            }
+            reader.Close();
+            return groupID;
         }
         public static string GetTeacherID(string message)
         {
@@ -234,7 +247,9 @@ namespace TelegBot
             MySqlCommand cmd = new MySqlCommand(query, Program.conn);
             MySqlDataReader reader = cmd.ExecuteReader();
             reader.Read();
-            return reader["teacherID"].ToString();
+            string teacherID = reader["teacherID"].ToString();
+            reader.Close();
+            return teacherID;
         }
 
         public static string StringFormatter(string daySchedule)
@@ -325,8 +340,10 @@ namespace TelegBot
             }
             catch (Exception)
             {
+                reader.Close();
                 return userArr;
             }
+            reader.Close();
             return userArr;
         }
         public static void DBUserInsert(long userID, string status, string schedule)
@@ -337,7 +354,9 @@ namespace TelegBot
             while (reader.Read())
             {
             }
+            reader.Close();
         }
+
 
     }
 }
