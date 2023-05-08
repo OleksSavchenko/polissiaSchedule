@@ -1,0 +1,56 @@
+19:58:40,256 [7] ERROR TelegBot.BotEngine - The given key '2049935390' was not present in the dictionary.
+20:01:48,797 [12] ERROR TelegBot.BotEngine - Read must be called first.
+20:02:06,284 [12] ERROR TelegBot.BotEngine - The given key '2049935390' was not present in the dictionary.
+20:02:31,422 [12] ERROR TelegBot.BotEngine - The given key '2049935390' was not present in the dictionary.
+20:02:33,066 [12] ERROR TelegBot.BotEngine - The given key '2049935390' was not present in the dictionary.
+20:03:56,891 [7] ERROR TelegBot.BotEngine - The given key '656697759' was not present in the dictionary.
+20:03:56,971 [7] ERROR TelegBot.BotEngine - The given key '656697759' was not present in the dictionary.
+20:06:23,785 [6] ERROR TelegBot.BotEngine - The given key '656697759' was not present in the dictionary.
+20:08:00,220 [14] ERROR TelegBot.BotEngine - The given key '2049935390' was not present in the dictionary.
+20:08:43,619 [11] ERROR TelegBot.BotEngine - An error occurred
+20:17:28,858 [7] ERROR TelegBot.BotEngine - Bad Request: message text is empty
+20:24:50,755 [7] ERROR TelegBot.BotEngine - The given key '656697759' was not present in the dictionary.
+20:26:16,581 [7] ERROR TelegBot.BotEngine - The given key '2049935390' was not present in the dictionary.
+20:26:28,044 [12] ERROR TelegBot.BotEngine - Read must be called first.
+20:26:35,178 [12] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+20:26:38,781 [12] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+20:26:55,622 [12] ERROR TelegBot.BotEngine - The given key '5185037595' was not present in the dictionary.
+20:27:04,082 [12] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+20:27:15,856 [15] ERROR TelegBot.BotEngine - An error occurred
+20:27:31,694 [15] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+20:27:45,533 [16] ERROR TelegBot.BotEngine - The given key '5185037595' was not present in the dictionary.
+20:27:50,851 [16] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+20:27:53,475 [16] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+20:28:14,042 [16] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+20:29:10,460 [21] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+20:31:37,786 [7] ERROR TelegBot.BotEngine - The given key '5252296908' was not present in the dictionary.
+20:46:55,980 [15] ERROR TelegBot.BotEngine - An error occurred
+20:47:59,617 [17] ERROR TelegBot.BotEngine - An error occurred
+20:47:59,654 [17] ERROR TelegBot.BotEngine - An error occurred
+20:59:13,691 [15] ERROR TelegBot.BotEngine - The given key '855547281' was not present in the dictionary.
+20:59:16,509 [15] ERROR TelegBot.BotEngine - The given key '855547281' was not present in the dictionary.
+20:59:30,514 [15] ERROR TelegBot.BotEngine - Read must be called first.
+21:01:13,239 [16] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+21:01:22,848 [16] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+21:01:46,334 [16] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+21:09:59,306 [14] ERROR TelegBot.BotEngine - The given key '656697759' was not present in the dictionary.
+21:21:54,905 [15] ERROR TelegBot.BotEngine - Read must be called first.
+21:22:30,123 [15] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+21:22:42,011 [16] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+21:23:18,101 [14] ERROR TelegBot.BotEngine - Read must be called first.
+21:28:57,152 [12] ERROR TelegBot.BotEngine - The given key '656697759' was not present in the dictionary.
+21:29:42,132 [14] ERROR TelegBot.BotEngine - The given key '656697759' was not present in the dictionary.
+21:29:47,420 [14] ERROR TelegBot.BotEngine - Не коректна назва групи/ім'я викладача
+21:31:02,946 [7] ERROR TelegBot.BotEngine - Не коректна назва групи/ім'я викладача
+21:31:27,982 [13] ERROR TelegBot.BotEngine - Не коректна назва групи/ім'я викладача
+21:33:14,662 [23] ERROR TelegBot.BotEngine - Не коректна назва групи/ім'я викладача
+21:33:19,889 [23] ERROR TelegBot.BotEngine - Read must be called first.
+21:33:22,279 [23] ERROR TelegBot.BotEngine - An error occurred
+21:33:25,976 [26] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+21:33:50,901 [28] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+21:33:54,901 [28] ERROR TelegBot.BotEngine - This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse
+21:35:18,637 [13] ERROR TelegBot.BotEngine - Не коректна назва групи/ім'я викладача
+21:38:05,129 [13] ERROR TelegBot.BotEngine - The given key '656697759' was not present in the dictionary.
+21:38:13,422 [13] ERROR TelegBot.BotEngine - Не коректна назва групи/ім'я викладача
+21:38:22,817 [13] ERROR TelegBot.BotEngine - Не коректна назва групи/ім'я викладача
+21:38:30,622 [13] ERROR TelegBot.BotEngine - An error occurred

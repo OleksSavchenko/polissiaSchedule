@@ -37,7 +37,7 @@ namespace TelegBot
         {
             Console.WriteLine("Hehe: " + bot.GetMeAsync().Result.FirstName);
 
-            conn.Open();
+            conn.OpenAsync();
 
             var cts = new CancellationTokenSource();
             var cancellationToken = cts.Token;

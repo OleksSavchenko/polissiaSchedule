@@ -60,6 +60,10 @@
             "Telegram.Bots.Extensions.Polling": {
               "target": "Package",
               "version": "[5.9.0, )"
+            },
+            "log4net": {
+              "target": "Package",
+              "version": "[2.0.15, )"
             }
           },
           "imports": [
